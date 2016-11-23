@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JS函数</title>
+<script type="text/javascript">
+	//生命式定义函数
+	function fun() {
+		console.log(arguments);
+		console.log('function fun');
+	}
+	fun(1, 2);//注意区分java中的重载
+	//函数赋值表达式定义函数
+	var fun = function() {
+		console.log('var fun');
+	}
+	fun();
+	//构造函数定义
+	var fun = new Function(console.log('new Function'));
+	fun();
+
+	//表达式调用方式
+	(function() {
+
+	})();
+	+function() {
+
+	}();
+	-function() {
+
+	}();
+	!function() {
+
+	}()
+	//eval函数
+	+ function() {
+		function fun() {
+			console.log('eval');
+		}
+		eval('fun')();
+	}();
+	//apply函数,参数是数组
+	+function() {
+		function fun() {
+			console.log('apply');
+		}
+		+function(fun) {
+			if (typeof fun == 'function') {
+				fun.apply();
+			}
+		}(fun);
+	}();
+	//call，参数用逗号分隔
+	+function() {
+		function fun() {
+			console.log('call');
+		}
+		+function(fun) {
+			if (typeof fun == 'function') {
+				fun.call();
+			}
+		}(fun);
+	}();
+	//bind，参数用逗号分隔
+	+function() {
+		function fun() {
+			console.log('bind');
+		}
+		+function(fun) {
+			if (typeof fun == 'function') {
+				var myFun = fun.bind();
+				myFun();
+			}
+		}(fun);
+	}();
+</script>
+</head>
+<body>
+	<a href="./../index.html">首页</a>
+</body>
+</html>

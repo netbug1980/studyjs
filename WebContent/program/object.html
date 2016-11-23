@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>面向对象编程</title>
+<script type="text/javascript">
+	/**
+	 * 常用的几种对象创建模式
+	 */
+	//使用new关键字创建
+	+function() {
+		var student = new Object();
+		student.name = '张三';
+		student.sex = '男';
+		student.doWhat = function() {
+			console.log(JSON.stringify(this) + " is learning.");
+		};
+		student.doWhat();
+	}();
+	//使用字面量创建
+	+function() {
+		var student = {
+			name : '李四',
+			sex : '男',
+			doWhat : function() {
+				console.log(JSON.stringify(this) + " is learning.");
+			}
+		};
+		student.doWhat();
+	}();
+	//工厂模式
+	+function() {
+		function Student(name, sex) {
+			var student = {
+				name : name,
+				sex : sex,
+				doWhat : function() {
+					console.log(JSON.stringify(this) + " is learning." + "【"
+							+ this.constructor.name + "】");
+				}
+			};
+			return student;
+		}
+		Student('张三', '男').doWhat();
+		Student('李四', '男').doWhat();
+	}();
+	// 构造函数(工厂模式都是Object类型，无法区分类型)
+	+function() {
+		function Student(name, sex) {
+			this.name = name;
+			this.sex = sex;
+			this.doWhat = function() {
+				console.log(JSON.stringify(this) + " is learning." + "【"
+						+ this.constructor.name + "】");
+			};
+		}
+		var stu01 = new Student('张三', '男');
+		stu01.doWhat();
+		var stu02 = new Student('李四', '男');
+		stu02.doWhat();
+		if (stu01 instanceof Student) {
+			console.log('stu01是一个Student的实例');
+		}
+		if (stu01.doWhat != stu02.doWhat) {
+			console.log("stu01.doWhaty与stu02.doWhat不是同一个");
+		}
+
+	}();
+	// 原型对象模式(原型对象prototype就是内存中为其他对象提供共享属性和方法的对象。constructor属性是指向原型对象的一个指针。)
+	+function() {
+		function Student(name, sex) {
+			this.name = name;
+			this.sex = sex;
+		}
+		Student.prototype = {
+			constructor : Student,
+			doWhat : function() {
+				console.log(JSON.stringify(this) + " is learning." + "【"
+						+ this.constructor.name + "】");
+			}
+		};
+		var stu01 = new Student('张三', '男');
+		stu01.doWhat();
+		var stu02 = new Student('李四', '男');
+		stu02.doWhat();
+		if (stu01 instanceof Student) {
+			console.log('stu01是一个Student的实例');
+		}
+		if (stu01.doWhat == stu02.doWhat) {
+			console.log("stu01.doWhaty与stu02.doWhat是同一个");
+		}
+	}();
+	//对象继承,覆写（混合模式）
+	+function() {
+		function Student(name, sex) {
+			this.name = name;
+			this.sex = sex;
+		}
+		Student.prototype = {
+			constructor : Student,
+			doWhat : function() {
+				console.log(JSON.stringify(this) + " is learning." + "【"
+						+ this.constructor.name + "】");
+			}
+		};
+		function BigStudent(name, sex, isBig) {
+			Student.apply(this, arguments);//属性继承,注意参数的个数
+			this.isBig = isBig;
+		}
+		BigStudent.prototype = Student.prototype;//原型链继承
+		BigStudent.prototype.hit = function(student) {
+			console.log('大学生开始打小学生了');
+			student.doWhat();
+		};
+		var stu01 = new Student('张三', '男');
+		stu01.doWhat();
+		if (stu01 instanceof Student) {
+			console.log('stu01是一个Student的实例');
+		}
+		var stu02 = new BigStudent('李四', '男', true);
+		stu02.doWhat();
+		stu02.hit(stu01);
+		if (stu02 instanceof BigStudent) {
+			console.log('stu02是一个BigStudent的实例');
+		}
+		if (stu01.doWhat == stu02.doWhat) {
+			console.log("stu01.doWhaty与stu02.doWhat是同一个");
+		}
+
+	}();
+</script>
+</head>
+<body>
+<a href="./../index.html">首页</a>
+</body>
+</html>

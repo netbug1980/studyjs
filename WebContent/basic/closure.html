@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JS闭包</title>
+<script type="text/javascript">
+	/* js闭包的作用：避免污染全局；封装以及结果缓存； */
+
+	//匿名自运行函数，避免污染全局
+	+function() {
+		var count = 0;
+	}();//运行后count就回被回收
+
+	// 封装以及结果缓存
+	+function(window) {
+		function counter() {
+			var _count = 0;//封装缓存计算结果
+			function add() {//子函数闭包,用于计算
+				_count++;
+			}
+			function sub() {//子函数闭包，用于计算
+				_count--;
+			}
+			function count() {//子函数闭包，get方法
+				return _count;
+			}
+			return {
+				add : add,
+				sub : sub,
+				count : count
+			};
+		}
+		if (!window.myCounter) {
+			window.myCounter = counter();
+		}
+		for (var i = 0; i < 10; i++) {
+			myCounter.add();
+		}
+		console.log(myCounter.count());
+	}(window);
+
+	var self = 'I\'m Global';
+	function introduceMySelf(self) {
+		console.log(self + ',introduce myself outside');
+	}
+
+	(function(self) {
+		introduceMySelf(self);
+	})('I\'m Closure');
+
+	(function(self) {
+		function introduceMySelf(self) {
+			console.log(self + ',introduce myself inside');
+		}
+		introduceMySelf(self);
+	})('I\'m Closure');
+
+	introduceMySelf(self);
+
+	var jQuery = 'jQuery Closure';
+	(function($) {
+		console.log($);
+	})(jQuery);
+</script>
+</head>
+<body>
+	<a href="./../index.html">首页</a>
+</body>
+</html>

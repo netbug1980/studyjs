@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>函数作用域</title>
+<script type="text/javascript">
+	/**
+	 * 函数作用域
+	 *js引擎会优先解析var变量和function定义！在预解析完成后从上到下逐步进行！
+	 */
+	+function() {
+		fun();//function可以先调用后声明
+		// 		fun.method();
+		// 		new fun().method2();
+		console.log(scope);//var 必须先声明后调用
+		var scope = 'outside';//此处声明了scope变量，并进行了定义，注意与没有var变量的区别，var定义的变量不能被delete
+		console.log(scope);
+		function fun() {
+			console.log('inside');
+		}
+		fun.method = function() {
+			console.log('method');
+		}
+		fun.prototype.method2 = function() {
+			console.log('method2');
+		}
+	}();
+	console.log('-------------分割线------------');
+
+	/**
+	 * 无块级作用域
+	 */
+	+function() {
+		var scope = 'outside';
+		i = 1;
+		function fun(flag) {
+			console.log(i);
+			if (flag) {
+				var scope = 'inside';
+				for (var i = 0; i < 3; i++)
+					;
+			}
+			console.log(scope);
+			console.log(i);
+		}
+		fun(true);
+	}();
+	console.log('-------------分割线------------');
+	/**
+	 * with块作用域
+	 */
+	+function() {
+		var scope = {
+			name : 'name',
+			age : 'age'
+		};
+		with (scope) {
+			console.log(name);
+			console.log(age);
+		}
+	}();
+
+	console.log('-------------分割线------------');
+
+	/**
+	 * 运行时变化的this
+	 */
+	+function() {
+		function Fun() {
+			console.log(arguments);
+			console.log(this);
+		}
+
+		Fun();
+
+		new Fun();
+
+		var obj1 = {
+			id : 1
+		};
+		Fun.apply(obj1, [ 1, 2 ]);
+
+		Fun.call(obj1, 1, 2);
+
+		var obj2 = {
+			id : 2
+		};
+		var fun = Fun.bind(obj2, 3, 4);
+		fun();
+
+	}();
+
+	console.log('-------------分割线------------');
+
+	/**
+	 * 作用域链
+	 */
+	+function() {
+		var scope = 'outside';
+		function fun() {
+			// var scope = 'inside';
+			console.log(scope);
+		}
+		fun();
+	}();
+	+function() {
+		for (var i = 0; i < 3; i++) {
+			setTimeout(function() {
+				console.log(i)
+			}, 1000)
+		}
+	}();
+	+function() {
+		for (var i = 0; i < 3; i++) {
+			+function(i) {
+				setTimeout(function() {
+					console.log(i)
+				}, 1000)
+
+			}(i);
+		}
+	}();
+</script>
+</head>
+<body>
+	<a href="./../index.html">首页</a>
+</body>
+</html>
